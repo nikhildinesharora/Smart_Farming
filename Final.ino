@@ -5,8 +5,8 @@
 #include <BlynkSimpleEsp8266.h>
 #include <DHT.h>
 #include <HCSR04.h>
+#include "secrets.h"
   
-#define BLYNK_AUTH_TOKEN "x7hpsy2d3p_ZywWpXFY3KcZrSDWsXNBU" 
 #define MoistureData1 D1
 #define MoistureData2 D2
 #define DHTPIN D3
@@ -22,8 +22,8 @@ long duration;
 int distance;
 float Temp,Humidity;
 char auth[] = BLYNK_AUTH_TOKEN;
-char ssid[] = "iPhone";
-char pass[] = "qwertyuiop";
+char ssid[] = WIFI_SSID;
+char pass[] = WIFI_PASSWORD;
 WidgetLCD lcd(V8);
 
 void setup() {

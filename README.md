@@ -1,69 +1,57 @@
-Smart Irrigation System
+# Smart Irrigation System
 
-Description
+An ESP8266-based irrigation controller that monitors soil moisture, temperature, humidity, rain level, and reservoir distance, then controls three relays and reports telemetry through Blynk.
 
-The Smart Irrigation System is an IoT-based project that monitors environmental conditions like soil moisture, temperature, humidity, and water levels. It automates irrigation using relays connected to pumps and provides real-time data and control through the Blynk IoT platform.
+## Hardware
 
-Features
-	•	Measures:
-	•	Soil Moisture: Two sensors to monitor soil conditions.
-	•	Temperature and Humidity: Using a DHT11 sensor.
-	•	Water Level: Using an ultrasonic sensor (HC-SR04).
-	•	Automates irrigation using relays based on soil moisture readings.
-	•	Sends real-time data to the Blynk IoT platform.
-	•	Allows remote monitoring and control through a mobile app.
+- ESP8266 development board
+- Two digital soil-moisture sensors
+- DHT11 temperature and humidity sensor
+- HC-SR04 ultrasonic distance sensor
+- Rain sensor on the analog input
+- Three relay-controlled outputs
 
-Hardware Requirements
-	•	ESP8266 microcontroller
-	•	DHT11 temperature and humidity sensor
-	•	HC-SR04 ultrasonic sensor
-	•	Soil Moisture Sensors (2 units)
-	•	Relays (3 units)
-	•	Jumper wires and a breadboard
-	•	Power supply
+## Data and control flow
 
-Software Requirements
-	•	Arduino IDE
-	•	Blynk library
-	•	ESP8266WiFi library
-	•	DHT library
-	•	HC-SR04 library
+The firmware reads the sensors, publishes measurements to Blynk virtual pins, and changes relay states from the two soil-moisture signals. The mobile dashboard provides remote visibility and manual interaction.
 
-Wiring Diagram
+| Signal | Pin / channel |
+| --- | --- |
+| Rain level | `A0` |
+| Soil moisture | `D1`, `D2` / Blynk `V1`, `V2` |
+| DHT11 | `D3` / Blynk `V6`, `V7` |
+| Relays | `D5`, `D6`, `D7` |
+| Ultrasonic trigger / echo | `D8`, `D0` / Blynk `V8` |
 
-Connect the components as follows:
-	•	Soil Moisture Sensors: D1, D2
-	•	DHT11 Sensor: D3
-	•	Ultrasonic Sensor: D8 (Trig), D0 (Echo)
-	•	Relays: D5, D6, D7
+## Configure credentials safely
 
-Configuration
-	1.	Replace the placeholders in the code with your Blynk authentication token, WiFi SSID, and password:
+Credentials are intentionally excluded from version control.
 
-        #define BLYNK_AUTH_TOKEN "your_auth_token"
-        char ssid[] = "your_wifi_ssid";
-        char pass[] = "your_wifi_password";
+1. Copy `secrets.example.h` to `secrets.h`.
+2. Replace the placeholder Blynk token, Wi-Fi name, and Wi-Fi password.
+3. Keep `secrets.h` local; it is listed in `.gitignore`.
 
-    2.	Install the required libraries in the Arduino IDE:
-	•	Blynk
-	•	DHT
-	•	ESP8266WiFi
+```cpp
+#define BLYNK_AUTH_TOKEN "replace-with-blynk-token"
+#define WIFI_SSID "replace-with-wifi-name"
+#define WIFI_PASSWORD "replace-with-wifi-password"
+```
 
-Usage
-	1.	Upload the code to the ESP8266 using the Arduino IDE.
-	2.	Open the Blynk app and configure widgets for:
-	•	Soil Moisture (V1, V2)
-	•	Temperature (V6)
-	•	Humidity (V7)
-	•	Distance (V8)
-	3.	Monitor sensor readings and control relays via the Blynk app.
+## Build
 
-Functionality
-	•	Automatically turns on/off relays based on soil moisture levels.
-	•	Sends distance, temperature, and humidity data to the Blynk app.
-	•	Provides manual override for relays through the Blynk interface.
+Install the ESP8266 board support and these Arduino libraries:
 
+- Blynk
+- DHT sensor library
+- ESP8266WiFi
+- HCSR04
 
+Open `Final.ino` in the Arduino IDE, select the matching ESP8266 board and port, then build and upload the sketch.
 
+## Scope
 
-    
+This is a hardware prototype. Relay thresholds and fail-safe behavior should be recalibrated for the specific sensors, pumps, and power hardware before unattended use.
+
+## Security note
+
+An earlier commit included development credentials. Those credentials must be considered compromised and rotated even though the current source no longer contains them.
